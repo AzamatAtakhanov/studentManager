@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Ученик')}"></head>
+<body class="bg-light">
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<div class="container" style="max-width: 600px;">
+    <h1 class="h3 mb-3">
+        <span th:text="${student.id == null} ? 'Новый ученик' : 'Изменить ученика'">Новый ученик</span>
+        — <span th:text="${grade.name}">класс</span>
+    </h1>
+
+    <form th:object="${student}"
+          th:action="${student.id == null} ? @{/student/{g}/add(g=${grade.id})} : @{/student/{g}/{id}/edit(g=${grade.id}, id=${student.id})}"
+          method="post" class="bg-white border rounded p-3">
+        <div class="mb-3">
+            <label for="name" class="form-label">ФИО</label>
+            <input type="text" id="name" th:field="*{name}" class="form-control" th:errorclass="is-invalid">
+            <div class="invalid-feedback" th:errors="*{name}"></div>
+        </div>
+        <div class="mb-3">
+            <label for="gender" class="form-label">Пол</label>
+            <select id="gender" th:field="*{gender}" class="form-select" th:errorclass="is-invalid">
+                <option value="">— выберите —</option>
+                <option value="Мужской">Мужской</option>
+                <option value="Женский">Женский</option>
+            </select>
+            <div class="invalid-feedback" th:errors="*{gender}"></div>
+        </div>
+
+        <p class="form-text">Оценки от 1 до 5. Если оценки ещё нет, оставьте 0.</p>
+        <div class="row g-2 mb-3">
+            <div class="col-6 col-md-3">
+                <label for="firstQuarter" class="form-label">1 четверть</label>
+                <input type="number" id="firstQuarter" th:field="*{firstQuarter}" min="0" max="5"
+                       class="form-control" th:errorclass="is-invalid">
+            </div>
+            <div class="col-6 col-md-3">
+                <label for="secondQuarter" class="form-label">2 четверть</label>
+                <input type="number" id="secondQuarter" th:field="*{secondQuarter}" min="0" max="5"
+                       class="form-control" th:errorclass="is-invalid">
+            </div>
+            <div class="col-6 col-md-3">
+                <label for="thirdQuarter" class="form-label">3 четверть</label>
+                <input type="number" id="thirdQuarter" th:field="*{thirdQuarter}" min="0" max="5"
+                       class="form-control" th:errorclass="is-invalid">
+            </div>
+            <div class="col-6 col-md-3">
+                <label for="fourthQuarter" class="form-label">4 четверть</label>
+                <input type="number" id="fourthQuarter" th:field="*{fourthQuarter}" min="0" max="5"
+                       class="form-control" th:errorclass="is-invalid">
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+        <a th:href="@{/student/{g}(g=${grade.id})}" class="btn btn-danger">Отмена</a>
+    </form>
+</div>
+</body>
+</html>

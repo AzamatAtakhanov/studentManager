@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Ученики')}"></head>
+<body class="bg-light">
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h3 mb-0">Ученики — <span th:text="${grade.name}">класс</span></h1>
+        <div>
+            <a th:href="@{/grade}" class="btn btn-primary">К классам</a>
+            <a th:href="@{/student/{id}/add(id=${grade.id})}" class="btn btn-primary">Добавить ученика</a>
+        </div>
+    </div>
+
+    <p th:if="${#lists.isEmpty(students)}" class="text-muted">В этом классе пока нет учеников.</p>
+
+    <table th:unless="${#lists.isEmpty(students)}" class="table table-bordered bg-white align-middle">
+        <thead class="table-light">
+        <tr>
+            <th>#</th>
+            <th>ФИО</th>
+            <th>Пол</th>
+            <th>1 четверть</th>
+            <th>2 четверть</th>
+            <th>3 четверть</th>
+            <th>4 четверть</th>
+            <th>Средний</th>
+            <th style="width: 1%"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="student : ${students}">
+            <td th:text="${student.id}"></td>
+            <td th:text="${student.name}"></td>
+            <td th:text="${student.gender}"></td>
+            <td th:text="${student.firstQuarter > 0} ? ${student.firstQuarter} : '—'"></td>
+            <td th:text="${student.secondQuarter > 0} ? ${student.secondQuarter} : '—'"></td>
+            <td th:text="${student.thirdQuarter > 0} ? ${student.thirdQuarter} : '—'"></td>
+            <td th:text="${student.fourthQuarter > 0} ? ${student.fourthQuarter} : '—'"></td>
+            <td th:text="${student.average > 0} ? ${#numbers.formatDecimal(student.average, 1, 2)} : '—'"></td>
+            <td class="text-nowrap">
+                <a th:href="@{/student/{g}/{id}/edit(g=${grade.id}, id=${student.id})}"
+                   class="btn btn-sm btn-outline-secondary">Изменить</a>
+                <form th:action="@{/student/{g}/{id}/delete(g=${grade.id}, id=${student.id})}" method="post"
+                      class="d-inline" onsubmit="return confirm('Удалить ученика?')">
+                    <button type="submit" class="btn btn-sm btn-danger">Удалить</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

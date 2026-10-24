@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Классы')}"></head>
+<body class="bg-light">
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h3 mb-0">Классы</h1>
+        <a th:href="@{/grade/add}" class="btn btn-primary">Добавить класс</a>
+    </div>
+
+    <p th:if="${#lists.isEmpty(grades)}" class="text-muted">Классов пока нет.</p>
+
+    <table th:unless="${#lists.isEmpty(grades)}" class="table table-bordered bg-white align-middle">
+        <thead class="table-light">
+        <tr>
+            <th>#</th>
+            <th>Название</th>
+            <th>Количество</th>
+            <th style="width: 1%"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="grade : ${grades}">
+            <td th:text="${grade.id}"></td>
+            <td th:text="${grade.name}"></td>
+            <td th:text="${grade.students.size()}"></td>
+            <td class="text-nowrap">
+                <a th:href="@{/student/{id}(id=${grade.id})}" class="btn btn-sm btn-primary">Ученики</a>
+                <a th:href="@{/grade/{id}/edit(id=${grade.id})}" class="btn btn-sm btn-outline-secondary">Изменить</a>
+                <form th:action="@{/grade/{id}/delete(id=${grade.id})}" method="post" class="d-inline"
+                      onsubmit="return confirm('Удалить класс вместе со всеми учениками?')">
+                    <button type="submit" class="btn btn-sm btn-danger">Удалить</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
